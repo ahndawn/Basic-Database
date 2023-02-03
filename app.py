@@ -1,51 +1,55 @@
-from flask import Flask, request, render_template, redirect, flash, session, g
-from models import db, connect_db, Customer
+from flask import Flask, request, render_template,  redirect, flash, session
+from flask_debugtoolbar import DebugToolbarExtension
+from models import db,  connect_db, Customer, Department, Employee, get_directory, get_directory_join, get_directory_join_class, get_directory_all_join, Project, EmployeeProject
+from forms import AddCustomerForm, EmployeeForm
 
 app = Flask(__name__)
 
-def get_db():
-    if 'db' not in g:
-        g.db = connect_db()
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///employees_db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_ECHO'] = True
+app.config['SECRET_KEY'] = "chickenzarecool21837"
+app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
+debug = DebugToolbarExtension(app)
 
-    return g.db
-
-@app.teardown_appcontext
-def teardown_db(exception):
-    db = g.pop('db', None)
-
-    if db is not None:
-        db.close()
-
-# important to configure in order to not get an error
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///customers'
-app.config['SQLALCHEMY_TRACK_MODIFCATIONS'] = False
-
-# after connfiguration call connect_db from models python file
 connect_db(app)
-
-@app.route('/customers')
-def list_customers():
-    """Shows list of all pets in db"""
-    
-    customers = Customer.query.all()
-    return render_template("customers.html", customers=customers)
-
-@app.route('/customers', methods=["POST"])
-def create_customer():
-    name = request.form["name"]
-    address = request.form["address"]
-
-    new_customer = Customer(name=name, address=address)
-    db.session.add(new_customer)
-    db.session.commit()
-
-    return redirect(f'/{new_customer.id}')
 
 @app.route('/')
 def home():
     """Shows Home page"""
     
-    return render_template("base.html")
+    return render_template("home.html")
+# Customers routes
+@app.route('/customers')
+def list_customers():
+    """Shows list of all customers in db"""
+    customers = Customer.query.all()
+    return render_template("customers.html", customers=customers)
+
+@app.route("/customers/add", methods = ["GET", "POST"])
+def add_customer():
+    """Add Customer Form; handle adding"""
+    form = AddCustomerForm()
+    if form.validate_on_submit():
+        last_name = form.last_name.data
+        first_name = form.first_name.data
+        phone_number = form.phone_number.data
+        email = form.email.data
+        address_line_1 = form.address_line_1.data
+        address_line_2 = form.address_line_2.data
+        city = form.city.data
+        state= form.state.data
+        postal= form.postal.data
+        community = form.community.data
+        sub_community = form.sub_community
+        customer = Customer(last_name=last_name, first_name=first_name, phone_number=phone_number, email=email, address_line_1=address_line_1, address_line_2=address_line_2, city=city, state=state, postal=postal, community=community, sub_community=sub_community)
+        db.session.add(customer)
+        db.session.commit()
+        flash(f"Added {last_name}")
+        return redirect("/customers")
+    else:
+        return render_template(
+            "add_customer_form.html", form=form)
 
 @app.route('/<int:customer_id>')
 def show_cust(customer_id):
@@ -53,7 +57,52 @@ def show_cust(customer_id):
     customer = Customer.query.get_or_404(customer_id)
     return render_template("details.html", customer=customer)
 
+
+# Phones route
+@app.route('/phones')
+def list_phones():
+    """Renders directory of employees and phone numbers  (from dept)"""
+    emps = Employee.query.all()
+    return render_template('phones.html', emps=emps)
+
+
+# communities
 @app.route("/communities/<community_id>")
 def show_communities(community_id):
     Customer.get_by_community(community_id)
     return render_template("community.html", customers=customers, community=community_id)
+
+# employees routes
+@app.route('/employees/new', methods = ["GET", "POST"])
+def add_employee():
+    form = EmployeeForm()
+    depts = db.session.query(Department.dept_code, Department.dept_name)
+    form.dept_code.choices = depts
+    if form.validate_on_submit():
+        name = form.name.data
+        state = form.state.data
+        dept_code = form.dept_code.data
+        emp = Employee(name="name", state="state", dept_code="dept_code")
+        db.session.add(emp)
+        db.session.commit()
+        return redirect('/phones')
+    else:
+        return render_template('add_employee_form.html', form = form)
+
+# edit employees
+@app.route('/employees/<int:id>/edit', methods=["GET", "POST"])
+def edit_employee(id):
+    emp = Employee.query.get_or_404(id)
+    form = EmployeeForm(obj=emp)
+    depts = db.session.query(Department.dept_code, Department.dept_name)
+    form.dept_code.choices = depts
+
+    if form.validate_on_submit():
+        emp.name = form.name.data
+        emp.state = form.state.data
+        emp.dept_code = form.dept_code.data
+        db.session.commit()
+        return redirect('/phones')
+    else:
+        return render_template("edit_employee_form.html", form=form)
+
