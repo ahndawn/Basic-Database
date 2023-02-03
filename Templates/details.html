@@ -7,6 +7,9 @@
     <title>{{customer.name}}</title>
 </head>
 <body>
+    {% extends 'home.html' %}
+    {% block title %}All Customers{% endblock title %}
+    {% block content %}
     <h1>{{customer.name}}</h1>
     <ul>
         <li>ID: {{customer.name}}</li>
@@ -15,4 +18,5 @@
         <li>Community: <a href="/community/{{customer.community}}">{{customer.community}}</a></li>
     </ul>
 </body>
+{% endblock %}
 </html>
