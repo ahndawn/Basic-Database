@@ -1,7 +1,10 @@
+
 from flask import Flask, request, render_template,  redirect, flash, session
 from flask_debugtoolbar import DebugToolbarExtension
 from models import db,  connect_db, Customer, Department, Employee, get_directory, get_directory_join, get_directory_join_class, get_directory_all_join, Project, EmployeeProject
-from forms import AddCustomerForm, EmployeeForm
+from forms import AddCustomerForm, EmployeeForm, UserForm 
+# CustomerSearchForm, NewCustomerForm, EditCustomerInfoForm, EditContactInfoForm, EditAddressInfoForm, JobEntryForm
+from sqlalchemy.exc import IntegrityError
 
 app = Flask(__name__)
 
@@ -105,4 +108,54 @@ def edit_employee(id):
         return redirect('/phones')
     else:
         return render_template("edit_employee_form.html", form=form)
+
+###########################################
+# User information
+@app.route('/register', methods=['GET', 'POST'])
+def register_user():
+    form = UserForm()
+    if form.validate_on_submit():
+        username = form.username.data
+        password = form.password.data
+        new_user = User.register(username, password)
+
+        db.session.add(new_user)
+        try:
+            db.session.commit()
+        except IntegrityError:
+            form.username.errors.append('Username taken.  Please pick another')
+            return render_template('register.html', form=form)
+        session['user_id'] = new_user.id
+        flash('Welcome! Successfully Created Your Account!', "success")
+        return redirect('/tweets')
+
+    return render_template('register.html', form=form)
+
+@app.route('/login', methods=['GET', 'POST'])
+def login_user():
+    form = UserForm()
+    if form.validate_on_submit():
+        username = form.username.data
+        password = form.password.data
+
+        user = User.authenticate(username, password)
+        if user:
+            flash(f"Welcome Back, {user.username}!", "primary")
+            session['user_id'] = user.id
+            return redirect('/tweets')
+        else:
+            form.username.errors = ['Invalid username/password.']
+
+    return render_template('login.html', form=form)
+
+
+@app.route('/logout')
+def logout_user():
+    session.pop('user_id')
+    flash("Goodbye!", "info")
+    return redirect('/')
+
+####################
+# SCHEDULE
+
 
