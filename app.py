@@ -1,27 +1,28 @@
-
 from flask import Flask, request, render_template,  redirect, flash, session
 from flask_debugtoolbar import DebugToolbarExtension
-from models import db,  connect_db, Customer, Department, Employee, get_directory, get_directory_join, get_directory_join_class, get_directory_all_join, Project, EmployeeProject
-from forms import AddCustomerForm, EmployeeForm, UserForm 
+from models import db,  connect_db, Call, Customer, Department, Employee, get_directory, get_directory_join, get_directory_join_class, get_directory_all_join, Project, EmployeeProject
+from forms import AddCustomerForm, EmployeeForm, UserForm, CallForm 
 # CustomerSearchForm, NewCustomerForm, EditCustomerInfoForm, EditContactInfoForm, EditAddressInfoForm, JobEntryForm
 from sqlalchemy.exc import IntegrityError
 
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///employees_db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///mwc'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
 app.config['SECRET_KEY'] = "chickenzarecool21837"
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 debug = DebugToolbarExtension(app)
 
-connect_db(app)
+with app.test_request_context():    
+    connect_db(app)
+    db.create_all()
 
 @app.route('/')
 def home():
     """Shows Home page"""
     
-    return render_template("home.html")
+    return render_template("base.html")
 # Customers routes
 @app.route('/customers')
 def list_customers():
@@ -155,7 +156,64 @@ def logout_user():
     flash("Goodbye!", "info")
     return redirect('/')
 
-####################
-# SCHEDULE
 
 
+#################################
+#Call log
+@app.route('/calls/add', methods=["GET", "POST"])
+def calllog():
+    form = CallForm()
+    if form.validate_on_submit():
+        date_time = form.date_time.data
+        customer_name = form.customer_name.data
+        phone_number = form.phone_number.data
+        community = form.community.data
+        area = form.area.data
+        address = form.address.data
+        customer_type = form.customer_type.data
+        call_type = form.call_type.data
+        comments = form.comments.data
+        received_type = form.received_type.data
+        response = form.response.data
+        card = form.card.data
+        database = form.database.data
+        resolved = form.resolved.data
+        booked = form.booked.data
+        call = Call(date_time=date_time, customer_name=customer_name, phone_number=phone_number, community=community, area=area, address=address, customer_type=customer_type, call_type=call_type, comments=comments, received_type=received_type, response=response, card=card, database=database, resolved=resolved, booked=booked)
+        db.session.add(call)
+        db.session.commit()
+        flash(f"Added {customer_name}")
+        return redirect('/calls')
+    else:
+        return render_template("add_call.html", form=form)
+
+@app.route('/calls', methods=['GET', "POST"])
+def show_calls():
+    calls = Call.query.all()
+    return render_template('calls.html', calls=calls)
+
+@app.route("/calls/edit", methods=["POST", "GET"])
+def update_call():
+    form = CallForm()
+    if form.validate_on_submit():
+        call = Call.query.all()
+        call.date_time = request.form["date_time"]
+        call.name = request.form["customer_name"]
+        call.phone_number = request.form["phone_number"]
+        call.community = request.form["community"]
+        call.area = request.form["area"]
+        call.address = request.form["address"]
+        call.customer_type = request.form["customer_type"]
+        call.call_type = request.form["call_type"]
+        call.comments = request.form["comments"]
+        call.received_type = request.form["received_type"]
+        call.response = request.form["customer_type"]
+        call.card = request.form["card"]
+        call.database = request.form["database"]
+        call.resolved = request.form["resolved"]
+        call.booked = request.form["booked"]
+  # Update other pieces of information here
+        db.session.commit()
+        return render_template('calls.html', call=call, form=form)
+
+    

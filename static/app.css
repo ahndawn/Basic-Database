@@ -1,3 +1,7 @@
+h1 {
+  text-align: center;
+}
+
 /* Navbar container */
 .navbar {
   overflow: hidden;
@@ -66,4 +70,13 @@
 /* Show the dropdown menu on hover */
 .dropdown:hover .dropdown-content {
   display: block;
+}
+
+table, th, td {
+  border: 1px solid black;
+  text-align: center;
+}
+
+thead {
+  background-color: lightskyblue;
 }

@@ -1,7 +1,7 @@
-    {% extends 'home.html' %}
+    {% extends 'base.html' %}
     {% block title %}All Customers{% endblock title %}
     {% block content %}
-
+<div class ="container">
     <a href="/customers/add" class="btn btn-success btn-lg">Add New Customer</a>
 
     <h1>All Customers</h1>
@@ -11,6 +11,5 @@
             {% endfor %}
         </ul>
     </form>
-</body>
+</div>
 {% endblock %}
-</html>

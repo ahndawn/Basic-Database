@@ -4,11 +4,6 @@ from flask_bcrypt import Bcrypt
 db = SQLAlchemy()
 
 bcrypt = Bcrypt()
-
-def connect_db(app):
-    db.app = app
-    db.init_app(app)
-
 # MODELS GO BELOW!
 
 class Customer(db.Model):
@@ -24,10 +19,8 @@ class Customer(db.Model):
 
     addresses = db.relationship('Address', backref='customers', lazy='dynamic')
     numbers = db.relationship('PhoneNumber', backref='customers', lazy='dynamic')
-    emails = db.relationship('Email', backref='customers', lazy='dynamic')
+
     jobs = db.relationship('Job', backref='customers', lazy='dynamic')
-    payments = db.relationship('Payment', backref='customers', lazy='dynamic')
-    customer_notes = db.relationship('NoteConnector', backref='customers', lazy='dynamic')
     
     def __repr__(self):
         return f"<Customer {self.last_name} {self.id}>"
@@ -40,8 +33,8 @@ class Address(db.Model):
     address_ln2 = db.Column(db.String)
     city = db.Column(db.String)
     zip = db.Column(db.String)
-    community_id = db.Column(db.String, db.ForeignKey('community.id'))
-    sub_community_id = db.Column(db.String, db.ForeignKey('sub_community.id'))
+    community_id = db.Column(db.Integer, db.ForeignKey('community.id'))
+    sub_community_id = db.Column(db.Integer, db.ForeignKey('sub_community.id'))
     customer_id = db.Column(db.Integer, db.ForeignKey('customers.id'))
     address_note1 = db.Column(db.String)
     address_note2 = db.Column(db.String)
@@ -154,8 +147,70 @@ class PhoneNumber(db.Model):
     def __repr__(self):
         return '<Phone Number {}><Type {}><Customer {}>'.format(self.number, self.number_type, self.customer.last_name)
 
+class Email(db.Model):
+    __tablename__ = 'email'
+    id = db.Column(db.Integer, primary_key=True)
 
-#######################################
+    email = db.Column(db.String)
+    customer_id = db.Column(db.Integer, db.ForeignKey('customers.id'))
+
+    def __repr__(self):
+        return '<Email {}><Customer {}>'.format(self.email, self.customer.last_name)
+
+class Payment(db.Model):
+    __tablename__ = 'payment'
+    id = db.Column(db.Integer, primary_key=True)
+
+    customer_id = db.Column(db.Integer, db.ForeignKey('customers.id'), nullable=False)
+    date_processed = db.Column(db.Date)
+    type = db.Column(db.String, nullable=False)
+    ref = db.Column(db.String)
+    amount = db.Column(db.Float, nullable=False)
+
+    jobs = db.relationship('PaymentConnector', backref='payment', lazy='dynamic')
+
+    def __repr__(self):
+        return '<Customer Payment - Customer: {}, Date: {}, Type: {}, Ref: {}, Amt: {}>'.format(
+            self.customer.last_name, self.date_processed, self.type, self.ref, self.amount)
+
+class PaymentConnector(db.Model):
+    __tablename__ = 'payment_connector'
+    id = db.Column(db.Integer, primary_key=True)
+
+    job_id = db.Column(db.Integer, db.ForeignKey('job.id'), nullable=False)
+    payment_id = db.Column(db.Integer, db.ForeignKey('payment.id'), nullable=False)
+
+    def __repr__(self):
+        return '<Job Payment - Job ID: {}, Payment ID: {}>'.format(self.job_id, self.payment_id)
+
+
+
+class Note(db.Model):
+    __tablename__ = 'note'
+    id = db.Column(db.Integer, primary_key=True)
+
+    note = db.Column(db.String, unique=True)
+
+    def __repr__(self):
+        return '<Note {}>'.format(self.note)
+
+
+class NoteConnector(db.Model):
+    __tablename__ = 'note_connector'
+    id = db.Column(db.Integer, primary_key=True)
+
+    note_id = db.Column(db.Integer, db.ForeignKey('note.id'), nullable=False)
+
+    customer_id = db.Column(db.Integer, db.ForeignKey('customers.id'))
+    address_id = db.Column(db.Integer, db.ForeignKey('address.id'))
+    job_id = db.Column(db.Integer, db.ForeignKey('job.id'))
+
+    def __repr__(self):
+        return 'NoteConnector - Note: {}, Customer: {}, Address: {}, Job: {}'\
+            .format(self.note_id, self.customer_id, self.address_id, self.job_id)
+
+
+
 #departments
 class Department(db.Model):
     """Department Model"""
@@ -247,7 +302,6 @@ def get_directory_all_join():
         print(name, dept, phone)
 
 
-#################################
 #User
 class User(db.Model):
 
@@ -273,7 +327,6 @@ class User(db.Model):
     @classmethod
     def authenticate(cls, username, pwd):
         """Validate that user exists & password is correct.
-
         Return user if valid; else return False.
         """
 
@@ -284,3 +337,32 @@ class User(db.Model):
             return u
         else:
             return False
+
+
+
+#CallLog
+class Call(db.Model):
+    __tablename__ = 'calls'
+    id = db.Column(db.Integer, primary_key=True)
+    date_time = db.Column(db.String(20), nullable=False)
+    customer_name = db.Column(db.String(64), nullable=False)
+    phone_number = db.Column(db.String(64), nullable=False)
+    community = db.Column(db.String(64), nullable=True)
+    area = db.Column(db.String(64), nullable=True)
+    address = db.Column(db.String(256), nullable=False)
+    customer_type = db.Column(db.String(64), nullable=False)
+    call_type = db.Column(db.String(64), nullable=False)
+    comments = db.Column(db.String(64), nullable=False)
+    received_type = db.Column(db.String(64), nullable=True)
+    response = db.Column(db.Boolean, nullable=True)
+    card = db.Column(db.Boolean, nullable=True)
+    database = db.Column(db.Boolean, nullable=True)
+    resolved = db.Column(db.Boolean, nullable=True)
+    booked = db.Column(db.Boolean, nullable=True)
+
+
+def connect_db(app):
+    """Connect to database."""
+
+    db.app = app
+    db.init_app(app)

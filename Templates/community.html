@@ -1,15 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{community}}</title>
-</head>
-<body>
-    {% extends 'home.html' %}
+{% extends 'base.html' %}
     {% block title %}All Customers{% endblock title %}
     {% block content %}
+<div class ="container">
     <h1>Customers in the Community: {{community}}</h1>
         <ul>
             {% for customer in customers %}
@@ -17,6 +9,5 @@
             {% endfor %}
         </ul>
         <a href="/customers">Back to All Customers</a>
-</body>
+    </div>
 {% endblock %}
-</html>

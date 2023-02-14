@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, FloatField, SelectField, PasswordField, SubmitField, EmailField, TextAreaField, FieldList, FormField, IntegerField, DateField, TimeField, BooleanField
+from wtforms import StringField, DateTimeField, FloatField, SelectField, PasswordField, SubmitField, EmailField, TextAreaField, FieldList, FormField, IntegerField, DateField, TimeField, BooleanField
 from wtforms.validators import InputRequired, length, optional, email, DataRequired
 
 class AddCustomerForm(FlaskForm):
@@ -131,3 +131,24 @@ class JobEntryForm(FlaskForm):
 
     search_for_customer = SubmitField('Search for Customer')
     submit_new_job = SubmitField('Add New Job')
+
+
+########################################
+#CALL LOG
+
+class CallForm(FlaskForm):
+    date_time = StringField("Date/Time", validators=[DataRequired()])
+    customer_name = StringField("Customer Name", validators=[DataRequired()])
+    phone_number = StringField("Phone Number", validators=[DataRequired()])
+    community = StringField("Community", validators=[DataRequired()])
+    area = StringField("Area", validators=[DataRequired()])
+    address = StringField("Address", validators=[DataRequired()])
+    customer_type = StringField("Customer Type", validators=[DataRequired()])
+    call_type = StringField("Call Type", validators=[DataRequired()])
+    comments = StringField("Comments")
+    received_type = StringField("Received Type", validators=[DataRequired()])
+    response = BooleanField("Response")
+    card = BooleanField("Card")
+    database = BooleanField("Database")
+    resolved = BooleanField("Resolved")
+    booked = BooleanField("Booked")
