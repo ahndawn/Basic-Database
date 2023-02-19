@@ -1,0 +1,19 @@
+<table class="table bg-info" style="min-width: 390px;">
+    <tr>
+        <td style="border: none;padding-top: 10px;"></td>
+    </tr>
+    {% for email in form.emails %}
+        {{ email.form.hidden_tag() }}
+        {% if email.errors %}
+            <tr>
+                <td style="border: none;color: red" class="text-center"><b>{{ email.errors.email[0] }}</b></td>
+            </tr>
+        {% endif %}
+        <tr>
+            <td class="text-center" style="border: none">{{ email.form.email }}</td>
+        </tr>
+    {% endfor %}
+    <tr>
+        <td style="border: none;padding-bottom: 10px;"></td>
+    </tr>
+</table>

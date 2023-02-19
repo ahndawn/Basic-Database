@@ -1,0 +1,49 @@
+<div id="edit_info_modal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary bg-gradient text-white">
+                <h2 class="modal-title">Edit Customer Info</h2>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post" id="edit_info_form" novalidate>
+                <div class="modal-body">
+                    {{ info_form.hidden_tag() }}
+                    <table class="table">
+                        <tr class="text-center">
+                            <th style="border: none;">First Name</th>
+                            <th style="border: none;">Last Name</th>
+                        </tr>
+                        <tr>
+                            <td style="border: none;">{{ info_form.first_name() }}</td>
+                            <td style="border: none;">{{ info_form.last_name() }}<b style="font-size: 24px;color: red;padding-left: 5px;">*</b></td>
+                        </tr>
+                        <tr>
+                            <td style="border: none;">{{ info_form.first_name2() }}</td>
+                            <td style="border: none;">{{ info_form.last_name2() }}</td>
+                        </tr>
+                    </table>
+                    <hr>
+                    <table class="table">
+                        <tr>
+                            <th style="border: none;">{{ info_form.referral.label }}</th>
+                            <td style="border: none;">{{ info_form.referral() }}</td>
+                        </tr>
+                        <tr>
+                            <th style="border: none;">{{ info_form.customer_since.label }}</th>
+                            <td style="border: none;">{{ info_form.customer_since() }}</td>
+                        </tr>
+                        <tr>
+                            <th style="border: none;">{{ info_form.customer_notes.label }}</th>
+                            <td style="border: none;">{{ info_form.customer_notes() }}</td>
+                        </tr>
+                    </table>
+
+
+                </div>
+                <div class="modal-footer">
+                    {{ info_form.submit_customer_info(class="btn btn-primary form-control") }}
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

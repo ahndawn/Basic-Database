@@ -1,0 +1,29 @@
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header bg-primary bg-gradient text-white">
+            <h2 class="modal-title" id="modal_title">Edit Contact Info</h2>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form method="post" id="edit_contact_form" novalidate>
+            {{ contact_form.hidden_tag() }}
+            <div class="modal-body">
+                <h3>Phone Numbers <button type="button" id="addnum" class="btn btn-sm btn-link pt-0"><span class="bi-plus-square" style="color: limegreen;font-size: 20px;font-weight: bold;"></span></button></h3>
+
+                <div id="phone_fieldset">
+                    {% include '__customer_contact_phone_field.html' %}
+                </div>
+
+                <hr>
+
+                <h3>Emails <button type="button" id="addemail" class="btn btn-sm btn-link pt-0"><span class="bi-plus-square" style="color: limegreen;font-size: 20px;font-weight: bold;"></span></button></h3>
+                <div id="email_fieldset">
+                    {% include '__customer_contact_email_field.html' %}
+                </div>
+            </div>
+            <div class="modal-footer">
+                {{ contact_form.submit_contact_info(class="btn btn-primary form-control") }}
+            </div>
+        </form>
+    </div>
+</div>
+

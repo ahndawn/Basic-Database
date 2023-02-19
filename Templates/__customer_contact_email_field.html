@@ -1,0 +1,10 @@
+{% if contact_form.emails|length > 0 %}
+    {% for email in contact_form.emails %}
+        <div class="row">
+            <div class="w-auto">
+                {{ email.form.email }}
+            </div>
+            <div class="w-auto"><button type="button" id="remove_email" class="btn btn-sm btn-link pt-0"><span class="bi-dash-circle" style="color: red;font-size: 20px;font-weight: bold;"></span></button></div>
+        </div>
+    {% endfor %}
+{% endif %}

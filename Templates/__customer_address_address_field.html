@@ -1,0 +1,47 @@
+{% for address in address_form.addresses %}
+    <table class="table" style="border: none;">
+
+        <tr class="text-center" style="border: none;">
+            <th style="border: none;">Street Address</th>
+            <th style="border: none;">Suite/Apt #</th>
+        </tr>
+        <tr>
+            <td style="border: none;">{{ address.form.address_ln1 }}</td>
+            <td style="border: none;">{{ address.form.address_ln2 }}</td>
+        </tr>
+
+        <tr class="text-center" style="border: none;">
+            <th style="border: none;">City</th>
+            <th style="border: none;">Zip</th>
+        </tr>
+        <tr>
+            <td style="border: none;">{{ address.form.city }}</td>
+            <td style="border: none;">{{ address.form.zip }}</td>
+        </tr>
+
+        <tr class="text-center" style="border: none;">
+            <th style="border: none;">Community</th>
+            <th style="border: none;">Sub Community</th>
+        </tr>
+        <tr>
+            <td style="border: none;">{{ address.form.community(id="community_selector") }}</td>
+            <td style="border: none;">{{ address.form.sub_community(id="sub_community_selector") }}</td>
+        </tr>
+        {% if address.form.community.data == 'New Community' or address.form.sub_community.data == 'New Sub Community' %}
+            <tr class="text-center" style="border: none;">
+                <td>{% if address.form.community.data == 'New Community' %}{{ address.form.new_community }}{% endif %}</td>
+                <td>{% if address.form.sub_community.data == 'New Sub Community' %}{{ address.form.new_sub_community }}{% endif %}</td>
+            </tr>
+        {% endif %}
+
+        <tr class="text-center" style="border: none;">
+            <th style="border: none;">Billing Preference</th>
+            <th style="border: none;">Billing Type</th>
+        </tr>
+        <tr>
+            <td style="border: none;">{{ address.form.billing }}</td>
+            <td style="border: none;">{{ address.form.billing_type }}</td>
+        </tr>
+    </table>
+    <hr>
+{% endfor %}

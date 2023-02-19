@@ -1,0 +1,24 @@
+<table class="table bg-info" style="min-width: 390px;">
+    <tr>
+        <th class="text-center" style="border: none;">Label</th>
+        <th class="text-center" style="border: none;">Number</th>
+    </tr>
+
+    {% for number in form.phone_numbers %}
+        {{ number.form.hidden_tag() }}
+        {% if number.errors %}
+            <tr>
+                <td style="border: none;"></td>
+                <td style="border: none;color: red" class="text-center"><b>{{ number.errors.number[0] }}</b></td>
+            </tr>
+        {% endif %}
+        <tr>
+            <td class="text-center" style="border: none;">{{ number.form.number_type }}</td>
+            <td class="text-center" style="border: none;">{{ number.form.number }}</td>
+        </tr>
+    {% endfor %}
+
+    <tr>
+        <td style="border: none;padding-bottom: 10px;"></td>
+    </tr>
+</table>

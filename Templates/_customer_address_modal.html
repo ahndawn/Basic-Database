@@ -1,0 +1,21 @@
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header bg-primary bg-gradient text-white">
+            <h2 class="modal-title">Edit Address Info</h2>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form method="post" id="edit_address_form" novalidate>
+            {{ address_form.hidden_tag() }}
+            <div class="modal-body">
+                <h3>Address{% if address_form.addresses|length > 1 %}es{% endif %}<button type="button" id="add_address" class="btn btn-sm btn-link pt-0"><span class="bi-plus-square" style="color: limegreen;font-size: 20px;font-weight: bold;"></span></button></h3>
+                <hr>
+                <div id="customer_address_fieldset">
+                    {% include '__customer_address_address_field.html' %}
+                </div>
+            </div>
+        <div class="modal-footer">
+            {{ address_form.submit_address_info(class="btn btn-primary form-control") }}
+        </div>
+        </form>
+    </div>
+</div>

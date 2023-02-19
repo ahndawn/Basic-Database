@@ -1,0 +1,147 @@
+
+{% extends "base.html" %}
+
+{% block app_content %}
+<div class="search-area">
+    <div class="row justify-content-between">
+        <div class="col-auto">
+            <h1>Customer Search</h1>
+        </div>
+        <div class="col-auto">
+            <a href="/customers/add" style="border: none;">
+                <button type="button" class="btn btn-primary" id="new_cust_btn">
+                    New Customer<span class="ps-3"><span class="bi-person-plus-fill p-1" style="color: limegreen;border-color: limegreen;" role="img"></span></span>
+                </button>
+            </a>
+        </div>
+    </div>
+    <br>
+    <div class="row justify-content-between">
+        <div class="col-auto">
+            <form id="customer_search_form" method="post">
+                {{ form.hidden_tag() }}
+                <div class="row py-2 justify-content-start">
+                    <div class="col-auto">
+                        <img src="/static/assets/icons/person.png" style="width:35px;height:35px;"> {{ form.customer_name(size=30) }}
+                    </div>
+                </div>
+                <br>
+                <div class="row py-2 justify-content-start">
+                    <div class="col-auto">
+                        <img src="/static/assets/icons/phone.png" style="width: 40px; height: 40px;"> {{ form.customer_number(size=30) }}
+                    </div>
+                </div>
+                <br>
+                <div class="row py-2 justify-content-start">
+                    <div class="col-auto">
+                        <img src="/static/assets/icons/home.png" style="width: 40px; height: 40px;">  {{ form.customer_address(size=30) }}
+                    </div>
+                </div>
+                <br>
+                <div class="row" id="search">
+                    {{ form.submit(class="btn btn-primary form-control") }}
+                </div>
+ </div>
+{#                <table class="table w-50">#}
+{#                    <tr>#}
+{#                        <td style="border: none;"><img src="/static/assets/icons/person.png" style="width:50px;height:50px;"><span class="px-4"></span>{{ form.customer_name(size=50) }}</td>#}
+{#                    </tr>#}
+{#                    <tr>#}
+{#                        <td style="border: none;"><img src="/static/assets/icons/phone.png" style="width: 50px; height: 50px;"><span class="px-4"></span>{{ form.customer_number(size=50) }}</td>#}
+{#                    </tr>#}
+{#                    <tr>#}
+{#                        <td><img src="/static/assets/icons/home.png" style="width: 50px; height: 50px;"><span class="px-4"></span>{{ form.customer_address(size=50) }}</td>#}
+{#                    </tr>#}
+{#                    <tr>#}
+{#                        <td class="mx-auto" style="display: block;border: none;">{{ form.submit(class="btn btn-primary form-control") }}</td>#}
+{#                    </tr>#}
+{#                </table>#}
+            </form>
+        </div>
+    </div>
+
+
+{#    <form action="" method="POST" novalidate>#}
+{#        {{ form.hidden_tag()  }}#}
+{#        <div class="row" style="padding-top: 15px; padding-bottom: 15px;">#}
+{#             <div class="column" style="float:left;padding-left:15px;padding-right:15px">#}
+{#                 <img src="/static/assets/icons/person.png" style="width:50px;height:50px">#}
+{#             </div>#}
+{#            <div class="column" style="float:left">#}
+{#                {{ form.customer_name.label }}<br>#}
+{#                {{ form.customer_name(size=32) }}#}
+{#            </div>#}
+{#        </div>#}
+{#        <div class="row" style="padding-bottom: 15px; padding-top: 15px;">#}
+{#            <div class="column" style="float:left; padding-left: 15px; padding-right: 15px;">#}
+{#                <img src="/static/assets/icons/phone.png" style="width: 50px; height: 50px">#}
+{#            </div>#}
+{#            <div class="column" style="float: left">#}
+{#                {{ form.customer_number.label }}<br>#}
+{#                {{ form.customer_number(size=32) }}#}
+{#            </div>#}
+{#        </div>#}
+{#        <div class="row" style="padding-top: 15px; padding-bottom: 15px">#}
+{#            <div class="column" style="float: left; padding-left: 15px; padding-right: 15px">#}
+{#                <img src="/static/assets/icons/home.png" style="width: 50px; height: 50px">#}
+{#            </div>#}
+{#            <div class="column" style="float: left">#}
+{#                {{ form.customer_address.label }}<br>#}
+{#                {{ form.customer_address(size=32) }}#}
+{#            </div>#}
+{#        </div>#}
+{#        {{ form.submit(size=32) }}#}
+{#    </form>#}
+    <br>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <ul>
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    {% endwith %}
+    <hr>
+    {% if search_results %}
+        <table class="table table-striped table-bordered table-hover">
+            <tr>
+                <th class="text-center">Customer</th>
+                <th class="text-center">Phone</th>
+                <th class="text-center">Community</th>
+                <th class="text-center">Address</th>
+            </tr>
+            {% for customer in search_results %}
+                <tr>
+                    <td style="text-align: center;">
+                        <b><a href="/customers/{{ customer.id }}">{{ customer.last_name }}</a></b>
+                    </td>
+                    <td style="text-align: center">
+                        {% for number in customer.numbers %}
+                            <div style="padding: 5px">{{ number.number }}</div>
+                        {% endfor %}
+                    </td>
+                    <td style="text-align: center;">
+                        {% for address in customer.addresses %}
+                            <div style="padding: 5px">{% if address.community %}{{ address.community }}{% if address.sub_community %} - {{ address.sub_community }}{% endif %}{% endif %}</div>
+                        {% endfor %}
+                    </td>
+                    <td style="text-align: center;">
+                        {% for address in customer.addresses %}
+                            <div style="padding: 5px">{{ address.address_ln1 }}{% if address.address_ln2 %} ({{ address.address_ln2 }}){% endif %}</div>
+                        {% endfor %}
+                    </td>
+
+{#                    {% for address in customer.addresses %}#}
+{#                        <td style="text-align: center">#}
+{#                            {% if address.community %}{{ address.community }}{% if address.sub_community %} - {{ address.sub_community }}{% endif %}{% endif %}#}
+{#                        </td>#}
+{#                        <td style="text-align: center">#}
+{#                            {{ address.address_ln1 }}{% if address.address_ln2 %} ({{ address.address_ln2 }}){% endif %}#}
+{#                        </td>#}
+{#                    {% endfor %}#}
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+{% endblock %}

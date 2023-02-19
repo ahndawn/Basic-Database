@@ -304,47 +304,82 @@ def get_directory_all_join():
 
 #User
 class User(db.Model):
+    """User in the system."""
 
     __tablename__ = 'users'
 
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    id = db.Column(
+        db.Integer,
+        primary_key=True,
+    )
 
-    username = db.Column(db.Text, nullable=False,  unique=True)
+    email = db.Column(
+        db.Text,
+        nullable=False,
+        unique=True,
+    )
 
-    password = db.Column(db.Text, nullable=False)
+    username = db.Column(
+        db.Text,
+        nullable=False,
+        unique=True,
+    )
+
+    password = db.Column(
+        db.Text,
+        nullable=False,
+    )
+
+
+    def __repr__(self):
+        return f"<User #{self.id}: {self.username}, {self.email}>"
 
     @classmethod
-    def register(cls, username, pwd):
-        """Register user w/hashed password & return user."""
+    def signup(cls, username, email, password, image_url):
+        """Sign up user.
 
-        hashed = bcrypt.generate_password_hash(pwd)
-        # turn bytestring into normal (unicode utf8) string
-        hashed_utf8 = hashed.decode("utf8")
-
-        # return instance of user w/username and hashed pwd
-        return cls(username=username, password=hashed_utf8)
-
-    @classmethod
-    def authenticate(cls, username, pwd):
-        """Validate that user exists & password is correct.
-        Return user if valid; else return False.
+        Hashes password and adds user to system.
         """
 
-        u = User.query.filter_by(username=username).first()
+        hashed_pwd = bcrypt.generate_password_hash(password).decode('UTF-8')
 
-        if u and bcrypt.check_password_hash(u.password, pwd):
-            # return user instance
-            return u
-        else:
-            return False
+        user = User(
+            username=username,
+            email=email,
+            password=hashed_pwd,
+            image_url=image_url,
+        )
 
+        db.session.add(user)
+        return user
+
+    @classmethod
+    def authenticate(cls, username, password):
+        """Find user with `username` and `password`.
+
+        This is a class method (call it on the class, not an individual user.)
+        It searches for a user whose password hash matches this password
+        and, if it finds such a user, returns that user object.
+
+        If can't find matching user (or if password is wrong), returns False.
+        """
+
+        user = cls.query.filter_by(username=username).first()
+
+        if user:
+            is_auth = bcrypt.check_password_hash(user.password, password)
+            if is_auth:
+                return user
+
+        return False
 
 
 #CallLog
 class Call(db.Model):
-    __tablename__ = 'calls'
+    __tablename__ = 'call'
     id = db.Column(db.Integer, primary_key=True)
-    date_time = db.Column(db.String(20), nullable=False)
+    date = db.Column(db.String(20), nullable=False)
+    time = db.Column(db.String(20), nullable=False)
     customer_name = db.Column(db.String(64), nullable=False)
     phone_number = db.Column(db.String(64), nullable=False)
     community = db.Column(db.String(64), nullable=True)

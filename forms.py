@@ -22,9 +22,33 @@ class EmployeeForm(FlaskForm):
     state = StringField("State")
     dept_code = SelectField("Department Code")
 
-class UserForm(FlaskForm):
-    username = StringField("Username", validators=[InputRequired()])
-    password = PasswordField("Password", validators=[InputRequired()])
+##################################
+#User Forms
+class UserAddForm(FlaskForm):
+    """Form for adding users."""
+
+    username = StringField('Username', validators=[DataRequired()])
+    email = StringField('E-mail', validators=[DataRequired(), Email()])
+    password = PasswordField('Password', validators=[Length(min=6)])
+    image_url = StringField('(Optional) Image URL')
+
+
+class UserEditForm(FlaskForm):
+    """Form for editing users."""
+
+    username = StringField('Username', validators=[DataRequired()])
+    email = StringField('E-mail', validators=[DataRequired(), Email()])
+    image_url = StringField('(Optional) Image URL')
+    header_image_url = StringField('(Optional) Header Image URL')
+    bio = TextAreaField('(Optional) Tell us about yourself')
+    password = PasswordField('Password', validators=[Length(min=6)])
+
+
+class LoginForm(FlaskForm):
+    """Login form."""
+
+    username = StringField('Username', validators=[DataRequired()])
+    password = PasswordField('Password', validators=[Length(min=6)])
 
 #############################
 #Customer forms
@@ -137,7 +161,8 @@ class JobEntryForm(FlaskForm):
 #CALL LOG
 
 class CallForm(FlaskForm):
-    date_time = StringField("Date/Time", validators=[DataRequired()])
+    date = StringField("Date", validators=[DataRequired()])
+    time = StringField("Time", validators=[DataRequired()])
     customer_name = StringField("Customer Name", validators=[DataRequired()])
     phone_number = StringField("Phone Number", validators=[DataRequired()])
     community = StringField("Community", validators=[DataRequired()])

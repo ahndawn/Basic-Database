@@ -1,0 +1,59 @@
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header bg-primary" style="padding:9px 15px;-webkit-border-top-left-radius: 5px;-webkit-border-top-right-radius: 5px;-moz-border-radius-topleft: 5px;-moz-border-radius-topright: 5px;border-top-left-radius: 5px;border-top-right-radius: 5px;width: 100.1%;height: 100%;margin-top: -1px;margin-left: -0.5px;">
+            <button type="button" class="close btn-link" data-dismiss="modal">&times;</button>
+            <h2 class="modal-title" id="modal-title">Add Job</h2>
+        </div>
+        <form method="post" id="add_job_form" novalidate>
+            {{ job_form.hidden_tag() }}
+            <div class="modal-body" id="job_modal_body">
+                <table class="table" id="job_info_table">
+
+                    <tr>
+                        <th style="border: none;" class="text-center">Job Date</th>
+                        <th style="border: none;" class="text-center">Job Time</th>
+                    </tr>
+                    <tr class="text-center">
+                        <td style="border: none;" class="text-center">{{ job_form.job_day }}</td>
+                        <td style="border: none;" class="text-center">{{ job_form.job_time }}</td>
+                    </tr>
+
+                    <tr class="text-center">
+                        <th colspan="2" style="border: none;" class="text-center">Crew</th>
+                    </tr>
+                    <tr class="text-center">
+                        <td colspan="2" style="border: none;" class="text-center">{{ job_form.crew }}</td>
+                    </tr>
+
+                    {% if customer.addresses|length > 1 %}
+{#                        do something#}
+                    {% endif %}
+                </table>
+                <table class="table" id="services_table">
+                    <tr>
+                        <th colspan="4" class="text-center" style="border: none;"><h3>Services <button type="button" id="add_service" class="btn btn-sm btn-link pt-0"><span class="bi-plus-square" style="color: limegreen;font-size: 20px;"></span></button></h3></th>
+                    </tr>
+                    <tr class="text-center">
+                        <th colspan="2" style="border: none;" class="text-center">Service</th>
+                        <th colspan="2" style="border: none;" class="text-center">Price</th>
+                    </tr>
+                    {% for service in job_form.services %}
+                        <tr class="text-center">
+                            <td colspan="2" style="border: none;" class="text-center">{{ service.form.service }}</td>
+                            <td colspan="2" style="border: none;" class="text-center">{{ service.form.price }}</td>
+                        </tr>
+                        <tr class="text-center">
+                            <td style="border: none;" class="text-right"><button type="button" id="prcl_button" class="btn btn-sm bg-primary" onclick="document.getElementById('seal_button').class='btn btn-sm bg-primary disabled'">PRCL: {{ service.form.prcl(id="prcl_mod") }}</button></td>
+                            <td style="border: none;" class="text-left"><button type="button" id="seal_button" class="btn btn-sm bg-primary">SEAL: {{ service.form.seal(id="seal_mod") }}</button></td>
+                            <td style="border: none;" class="text-right"><button type="button" class="btn btn-sm bg-primary active">EST: {{ service.form.estimate }}</button></td>
+                            <td style="border: none;" class="text-left"><button type="button" class="btn btn-sm bg-primary">NC: {{ service.form.no_charge }}</button></td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+            <div class="modal-footer">
+                {{ job_form.submit_new_job(class="btn btn-primary form-control") }}
+            </div>
+        </form>
+    </div>
+</div>

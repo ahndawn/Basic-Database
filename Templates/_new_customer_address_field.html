@@ -1,0 +1,72 @@
+<table class="table bg-info">
+    {% set x = 0 %}
+    {% for address in form.addresses %}
+        {{ address.form.hidden_tag() }}
+        <tr>
+            <th class="text-center">Street Address</th>
+            <th class="text-center">Suite/Apt #</th>
+        </tr>
+        {% if address.errors.address_ln1 %}
+            <tr>
+                <td style="border: none;color: red;" class="text-center"><b>{{ address.errors.address_ln1[0] }}</b></td>
+            </tr>
+        {% endif %}
+        <tr>
+            <td class="text-center" style="border: none;">{{ address.form.address_ln1 }}</td>
+            <td class="text-center" style="border: none;">{{ address.form.address_ln2 }}</td>
+        </tr>
+        <tr>
+            <th class="text-center" style="border: none;">City</th>
+            <th class="text-center" style="border: none;">Zip</th>
+        </tr>
+        {% if address.errors.city or address.errors.zip %}
+            <tr>
+                <td class="text-center" style="border: none;color: red;">{% if address.errors.city %}<b>{{ address.errors.city[0] }}</b>{% endif %}</td>
+                <td class="text-center" style="border: none;color: red;">{% if address.errors.zip %}<b>{{ address.errors.zip[0] }}</b>{% endif %}</td>
+            </tr>
+        {% endif %}
+        <tr>
+            <td class="text-center" style="border: none;">{{ address.form.city }}</td>
+            <td class="text-center" style="border: none;">{{ address.form.zip }}</td>
+        </tr>
+        <tr>
+            <th class="text-center" style="border: none;">Community</th>
+            <th class="text-center" style="border: none;">Sub Community</th>
+        </tr>
+        <tr>
+            <td class="text-center" style="border: none;">{{ address.form.community(id="community_selector") }}</td>
+            <td class="text-center" style="border: none;">{{ address.form.sub_community(id="sub_community_selector") }}</td>
+        </tr>
+        {% if address.errors.new_community or address.errors.new_sub_community %}
+            <tr>
+                <td class="text-center" style="border: none;color: red;">{% if address.errors.new_community %}<b>{{ address.errors.new_community[0] }}</b>{% endif %}</td>
+                <td class="text-center" style="border: none;color: red;">{% if address.errors.new_sub_community %}<b>{{ address.errors.new_sub_community[0] }}</b>{% endif %}</td>
+            </tr>
+        {% endif %}
+        {% if address.form.community.data == 'New Community' or address.form.sub_community.data == 'New Sub Community' %}
+            <tr>
+                {% if address.form.community.data == 'New Community' %}
+                    <td class="text-center" style="border: none;">{{ address.form.new_community }}</td>
+                {% endif %}
+                {% if address.form.sub_community.data == 'New Sub Community' %}
+                    {% if address.form.community.data != 'New Community' %}
+                        <td style="border: none;"></td>
+                    {% endif %}
+                    <td class="text-center" style="border: none;">{{ address.form.new_sub_community }}</td>
+                {% endif %}
+            </tr>
+        {% endif %}
+        <tr>
+            <th class="text-center" style="border: none;">Billing Preference</th>
+            <th class="text-center" style="border: none;">Billing Type</th>
+        </tr>
+        <tr>
+            <td class="text-center" style="border: none;">{{ address.form.billing }}</td>
+            <td class="text-center" style="border: none;">{{ address.form.billing_type }}</td>
+        </tr>
+        <tr>
+            <td style="border: none;padding-bottom: 10px;"></td>
+            <td style="border: none;padding-bottom: 10px;"></td>
+        </tr>
+    {% endfor %}
+</table>

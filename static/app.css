@@ -1,5 +1,46 @@
+a {
+  text-decoration: none;
+}
+
+.search-area {
+  text-align: center;
+}
+
+.btn {
+  border: none;
+  outline: none;
+  color: black;
+  background-color: lightskyblue;
+  border-radius: 5px;
+  padding: 7px;
+}
+
+.btn:hover {
+  cursor: pointer;
+  border: #333;
+  outline: #333;
+  background-color: rgb(14, 132, 205);
+}
+
+button {
+  border: none;
+  outline: none;
+  color: black;
+  background-color: lightskyblue;
+  border-radius: 5px;
+  padding: 7px;
+}
+
+button:hover {
+  cursor: pointer;
+  border: #333;
+  outline: #333;
+  background-color: rgb(14, 132, 205);
+}
+
 h1 {
   text-align: center;
+  font-size: 45px;
 }
 
 /* Navbar container */
@@ -71,10 +112,14 @@ h1 {
 .dropdown:hover .dropdown-content {
   display: block;
 }
+table {
+  width: 50%;
+}
 
 table, th, td {
   border: 1px solid black;
   text-align: center;
+  width: 50%;
 }
 
 thead {
