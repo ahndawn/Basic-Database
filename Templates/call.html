@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/2157f639ef.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="static/app.css">
+ 
+  <title>Edit Call</title>
+</head>
+
+<body>
+  <h1>{{ 'Edit Call' if call.id else 'New Call' }}</h1>
+  <form action="{{ url_for('edit_call', id=call.id) }}" method="post">
+    {{ form.csrf_token }}
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Time</th>
+        <th>Customer Name</th>
+        <th>Phone Number</th>
+        <th>Community</th>
+        <th>Area</th>
+        <th>Address</th>
+        <th>Customer Type</th>
+        <th>Call Type</th>
+        <th>Comments</th>
+        <th>Received Type</th>
+        <th>Response</th>
+        <th>Card</th>
+        <th>Database</th>
+        <th>Resolved</th>
+        
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><input type="date" name="date_{{ call.id }}" value="{{ call.date }}"></td>
+        <td><input type="time" name="time_{{ call.id }}" value="{{ call.time }}"></td>
+        <td><input type="text" name="customer-name_{{ call.id }}" value="{{ call.customer_name }}"></td>
+        <td><input type="text" name="phone_number_{{ call.id }}" value="{{ call.phone_number }}"></td>
+        <td><input type="text" name="community_{{ call.id }}" value="{{ call.community }}"></td>
+        <td><input type="text" name="area_{{ call.id }}" value="{{ call.area }}"></td>
+        <td><input type="text" name="address_{{ call.id }}" value="{{ call.address }}"></td>
+        <td><input type="text" name="customer_type_{{ call.id }}" value="{{ call.customer_type }}"></td>
+        <td><input type="text" name="call_type_{{ call.id }}" value="{{ call.call_type }}"></td>
+        <td><input type="text" name="comments_{{ call.id }}" value="{{ call.comments }}"></td>
+        <td><input type="text" name="received_type_{{ call.id }}" value="{{ call.received_type }}"></td>
+        <td><input type="text" name="response_{{ call.id }}" value="{{ call.response }}"></td>
+        <td><input type="text" name="card_{{ call.id }}" value="{{ call.card }}"></td>
+        <td><input type="text" name="database_{{ call.id }}" value="{{ call.database }}"></td>
+        <td><input type="text" name="resolved_{{ call.id }}" value="{{ call.resolved }}"></td>
+        
+        <td class="actions"><button type="submit">Save</button></td>
+      </tr>
+  </tbody>
+</table>
+</form>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+<script src="https://kit.fontawesome.com/2157f639ef.js" crossorigin="anonymous"></script>
+</body>
+</html>

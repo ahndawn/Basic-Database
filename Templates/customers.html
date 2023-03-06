@@ -1,15 +1,306 @@
-    {% extends 'base.html' %}
-    {% block title %}All Customers{% endblock title %}
-    {% block content %}
-<div class ="container">
-    <a href="/customers/add" class="btn btn-success btn-lg">Add New Customer</a>
+{% extends 'base.html' %}
 
-    <h1>All Customers</h1>
-        <ul>
-            {% for customer in customers %}
-            <li><a href="/{{customer.id}}">{{customer.last_name}}</a></li>
-            {% endfor %}
-        </ul>
-    </form>
-</div>
+{% block content %}
+    <div class="container pt-2">
+        <div class="row">
+            <div class="w-auto pe-0">
+                <h1>{{ customer.last_name }}</h1>
+            </div>
+            <div class="align-left w-auto ps-0">
+                <button type="button" name="edit_info" id="edit_info" data-bs-toggle="modal" data-bs-target="#edit_info_modal"
+                        class="btn btn-sm btn-link" value="Edit Info"><i class="bi-gear-fill" role="img" style="color: gray;font-size: 20px;"></i></button>
+            </div>
+            {% include '_customer_info_modal.html' %}
+        </div>
+        {% if customer.first_name %}
+            {% if customer.last_name2 != customer.last_name and customer.first_name2 %}
+                {{ customer.first_name }} {{ customer.last_name }} & {{ customer.first_name2 }} {{ customer.last_name2 }}
+            {% elif customer.first_name2 %}
+                {{ customer.first_name }} & {{ customer.first_name2 }}
+            {% else %}
+                {{ customer.first_name }}
+            {% endif %}
+            <br>
+        {% endif %}
+        <hr>
+        <div class="row">
+            <div class="row">
+                <div class="w-auto pe-0">
+                    <h2>Contact Information</h2>
+                </div>
+                <div class="align-left w-auto ps-0">
+                    <button type="button" name="edit_contact" id="edit_contact" data-bs-toggle="modal" data-bs-target="#edit_contact_modal"
+                        class="btn btn-sm btn-link" value="Edit Contact Info"><i class="bi-gear-fill" role="img" style="color: gray;font-size: 18px;"></i></button>
+                </div>
+                <div id="edit_contact_modal" class="modal fade">
+                    {% include '_customer_contact_modal.html' %}
+                </div>
+            </div>
+            <div class="row">
+                <div class="w-auto">
+                    {% if customer.numbers %}
+                        <table class="table table-bordered w-auto table-hover">
+                            <thead class="table-primary">
+                                <tr>
+                                    <th class="text-center" scope="col">Label</th>
+                                    <th class="text-center" scope="col">Phone Number</th>
+                                </tr>
+                            </thead>
+                            {% for number in customer.numbers %}
+                                <tr>
+                                    <td>{% if number.number_type %}{{ number.number_type }}{% endif %}</td>
+                                    <td>{{ number.number }}</td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    {% endif %}
+                </div>
+                <div class="w-auto ps-1">
+                    {% if customer.emails %}
+                        <table class="table table-bordered w-auto table-hover" style="float: left">
+                            <thead class="table-primary">
+                                <tr>
+                                    <th class="text-center" scope="col">Email</th>
+                                </tr>
+                            </thead>
+                            {% for email in customer.emails %}
+                                <tr>
+                                    <td>{{ email.email }}</td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="row">
+                <div class="w-auto pe-0">
+                    <h2>Address{% if customer.addresses|length > 1 %}es{% endif %}</h2>
+                </div>
+                <div class="align-left w-auto ps-0">
+                    <button type="button" name="edit_address" id="edit_address" data-bs-toggle="modal" data-bs-target="#edit_address_modal"
+                        class="btn btn-sm btn-link" value="Edit Address Info"><i class="bi-gear-fill" role="img" style="color: gray;font-size: 18px;"></i></button>
+                </div>
+                <div id="edit_address_modal" class="modal fade">
+                    {% include '_customer_address_modal.html' %}
+                </div>
+            </div>
+            <div class="row">
+                <div class="w-auto">
+                    <table class="table table-bordered w-auto table-hover">
+                        <thead class="table-primary">
+                            <tr>
+                                <th class="text-center" scope="col">Street Address</th>
+                                <th class="text-center" scope="col">Suite/Apt #</th>
+                                <th class="text-center" scope="col">City</th>
+                                <th class="text-center" scope="col">Zip</th>
+                                <th class="text-center" scope="col">Community</th>
+                                <th class="text-center" scope="col">Sub-Community</th>
+                                <th class="text-center" scope="col">Maps</th>
+                            </tr>
+                        </thead>
+                        {% for address in customer.addresses %}
+                            {% set address_link = 'https://www.google.com/maps/place/' ~ address.address_ln1.replace(' ', '+') ~ ',+' ~ address.city.replace(' ', '+') ~ ',+FL+' ~ address.zip  %}
+                            <tr>
+                                <td>{{ address.address_ln1 }}</td>
+                                <td>{% if address.address_ln2 %}{{ address.address_ln2 }}{% endif %}</td>
+                                <td>{{ address.city }}</td>
+                                <td>{{ address.zip }}</td>
+                                <td>{% if address.community %}{{ address.community }}{% endif %}</td>
+                                <td>{% if address.sub_community %}{{ address.sub_community }}{% endif %}</td>
+                                <td><a href="{{ address_link }}" target="_blank">Link</a></td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="row">
+                <div class="w-auto pe-0">
+                    <h2>Jobs</h2>
+                </div>
+                <div class="w-auto align-left ps-0">
+                    <button type="button" name="add_job" id="add_job_button" data-bs-toggle="modal" data-bs-target="#add_job_modal"
+                        class="btn btn-sm pt-0" value="Add Job to Customer"><i class="bi-plus-square" role="img" style="color: limegreen;font-size: 20px;font-weight: bolder;"></i></button>
+                </div>
+                <div id="add_job_modal" class="modal fade">
+                    {% include '_customer_add_job_modal.html' %}
+                </div>
+            </div>
+            <div class="row">
+                <div class="w-auto">
+                    <table class="table table-bordered table-hover align-middle w-auto">
+                        <thead class="table-primary">
+                            <tr>
+                                <th class="text-center" scope="col">Job Date</th>
+                                <th class="text-center" scope="col">Crew</th>
+                                <th class="text-center" scope="col">Scheduled</th>
+                                <th class="text-center" scope="col">Completed</th>
+                            </tr>
+                        </thead>
+                        {% for address in customer.addresses %}
+                            {% for job in address.jobs %}
+                                {% if job.job_status == "CNCL" %}
+                                    {% set job_row_class = "table-danger" %}
+                                {% elif job.job_status == "D" %}
+                                    {% set job_row_class = "table-success" %}
+                                {% elif job.job_status == "SCH" %}
+                                    {% set job_row_class = "table-info" %}
+                                {% else %}
+                                    {% set job_row_class = "" %}
+                                {% endif %}
+
+                                <tr class="{{ job_row_class }}">
+                                    <td class="text-center">{{ job.job_date }}</td>
+                                    <td class="text-center">{% if job.crew %}{{ job.crew }}{% else %}?{% endif %}</td>
+                                    <td class="text-center">
+                                        <div>
+                                            {% if job.job_type == 'EST' or job.job_type == 'NC' %}
+                                                <b>{{ job.job_type }}</b>
+                                                {% if job.sched_services %}
+                                                    {% for service in job.sched_services %}
+                                                        <div>
+                                                            {{ service.svc }}
+                                                        </div>
+                                                    {% endfor %}
+                                                {% endif %}
+                                            {% else %}
+                                                <b>Total: ${{ job.sched_total }}</b>
+                                                {% if job.sched_services %}
+                                                    {% for service in job.sched_services %}
+                                                        <div>
+                                                            {{ service.svc }} - ${{ service.price }}
+                                                        </div>
+                                                    {% endfor %}
+                                                {% endif %}
+                                            {% endif %}
+                                        </div>
+                                    </td>
+                                    <td class="text-center">
+                                        {% if job.job_status == 'CNCL' %}<b>CANCEL</b>{% if job.compl_services[0] %}<br>{{ job.compl_services[0].svc }}{% endif %}
+                                        {% elif job.compl_services %}
+                                            <div>
+                                                {% if job.job_type == 'EST' or job.job_type == 'NC' %}
+                                                    <b>{{ job.job_type }}</b>
+                                                    {% for service in job.compl_services %}
+                                                        <div>
+                                                            {{ service.svc }}{% if job.job_type == 'EST' %} - $
+                                                                {{ service.price }}{% endif %}
+                                                        </div>
+                                                    {% endfor %}
+                                                {% else %}
+                                                    <b>Total: ${{ job.compl_total }}</b>
+                                                    {% for service in job.compl_services %}
+                                                        <div>
+                                                            {{ service.svc }} - ${{ service.price }}
+                                                        </div>
+                                                    {% endfor %}
+                                                {% endif %}
+                                            </div>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+
+    <script>
+        $("#addnum").click(function (){
+
+            $.ajax({
+                type: 'GET',
+                url: '/add_number',
+                data: $("#edit_contact_form").serialize(),
+                success: function(response){
+                    console.log("success");
+                    $("#phone_fieldset").html(response);
+                }
+            });
+        });
+    </script>
+    <script>
+            $("#addemail").click(function (){
+
+            $.ajax({
+                type: 'GET',
+                url: '/add_email',
+                data: $("#edit_contact_form").serialize(),
+                success: function(response){
+                    console.log("success");
+                    $("#email_fieldset").html(response);
+                }
+            });
+        });
+    </script>
+    <script type="text/javascript">
+        $(document).on('click',"#add_address", function (){
+
+        $.ajax({
+            type: 'GET',
+            url: '/add_address',
+            data: $("#edit_address_form").serialize(),
+            success: function(response){
+                console.log("success");
+                $("#customer_address_fieldset").html(response);
+            }
+        });
+    });
+</script>
+
+    <script type="text/javascript">
+        $(document).on('change',"#community_selector", function (){
+
+            $.ajax({
+                type: 'GET',
+                url: '/change_community',
+                data: $("#edit_address_form").serialize(),
+                success: function(response){
+                    console.log("success");
+                    $("#customer_address_fieldset").html(response);
+                }
+            });
+        });
+    </script>
+
+    <script type="text/javascript">
+        $(document).on('change',"#community_selector", function (){
+
+            $.ajax({
+                type: 'GET',
+                url: '/new_comm_subcomm',
+                data: $("#edit_address_form").serialize(),
+                success: function(response){
+                    console.log("success");
+                    $("#customer_address_fieldset").html(response);
+                }
+            });
+        });
+    </script>
+
+    <script type="text/javascript">
+        $(document).on('change',"#sub_community_selector", function (){
+
+            $.ajax({
+                type: 'GET',
+                url: '/new_comm_subcomm',
+                data: $("#edit_address_form").serialize(),
+                success: function(response){
+                    console.log("success");
+                    $("#customer_address_fieldset").html(response);
+                }
+            });
+        });
+    </script>
 {% endblock %}

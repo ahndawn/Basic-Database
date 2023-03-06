@@ -1,57 +1,52 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, DateTimeField, FloatField, SelectField, PasswordField, SubmitField, EmailField, TextAreaField, FieldList, FormField, IntegerField, DateField, TimeField, BooleanField
-from wtforms.validators import InputRequired, length, optional, email, DataRequired
+from wtforms import StringField, DateField, TimeField, FloatField, SelectField, PasswordField, SubmitField, EmailField, TextAreaField, FieldList, FormField, IntegerField, DateField, TimeField, BooleanField
+from wtforms.validators import InputRequired, length, optional, email, DataRequired, Email
+from datetime import date
 
-class AddCustomerForm(FlaskForm):
+class CallForm(FlaskForm):
+    date = DateField("Date", validators=[DataRequired()])
+    time = TimeField("Time", validators=[DataRequired()])
+    customer_name = StringField("Customer Name", validators=[DataRequired()])
+    phone_number = StringField("Phone Number", validators=[DataRequired()])
+    community = SelectField("Community", choices= [(''), ("Hunter's Run"), ("Ibis"), ("PGA Nat")])
+    area = SelectField("Area", choices=[(''), ('north'), ('northwest'), ('northeast'), ('central-west'), ('central'), ('central-east'), ('southeast'), ('south'), ('southwest'), ('ocean')], validators=[DataRequired()])
+    address = StringField("Address", validators=[DataRequired()])
+    customer_type = SelectField("Customer Type", choices=[('existing'),('new')], validators=[DataRequired()])
+    call_type = SelectField("Call Type", choices=[('schedule'),('complaint'), ('payment'), ('estimate')], validators=[DataRequired()])
+    comments = StringField("Comments")
+    received_type = SelectField("Received Type", choices=[('msg'), ('call'), ('rollover')],validators=[DataRequired()])
+    response = SelectField("Response", choices=[('yes'), ('no')])
+    card = SelectField("Card", choices=[('yes'), ('no')])
+    database = SelectField("Database", choices=[('yes'), ('no')])
+    resolved = SelectField("Resolved", choices=[('yes'), ('no')])
 
-    last_name = StringField("Last Name", validators=[InputRequired(message="Please add Last Name")])
-    first_name = StringField("First Name", validators=[InputRequired(message="Please add First Name")])
-    phone_number = StringField("Phone Number", validators=[InputRequired(message="Please add Number")])
-    email = StringField("Email", validators=[InputRequired()])
-    address_line_1 = StringField("Address Line 1", validators=[InputRequired()])
-    address_line_2 = StringField("Address Line 2")
-    city = StringField("City", validators=[InputRequired()])
-    state= StringField("State", validators=[InputRequired()])
-    postal= StringField("Postal Code", validators=[InputRequired()])
-    community = StringField("Community")
-    sub_community = StringField("Sub Community")
+class PhoneSearchForm(FlaskForm):
+    phone_number = StringField('PHONE NUMBER:', validators=[DataRequired()])
 
-class EmployeeForm(FlaskForm):
+class ResolvedSearchForm(FlaskForm):
+    resolved = SelectField('RESOLVED:', choices=[('no'),('yes')], validators=[DataRequired()])
 
-    name = StringField("Employee Name", validators=[InputRequired(message="Name cannot be blank")])
-    state = StringField("State")
-    dept_code = SelectField("Department Code")
+class NameSearchForm(FlaskForm):
+    customer_name = StringField('CUSTOMER NAME:', validators=[DataRequired()])
 
-##################################
-#User Forms
-class UserAddForm(FlaskForm):
-    """Form for adding users."""
+class ResponseSearchForm(FlaskForm):
+    response = SelectField('RESPONSE:', choices=[('no'),('yes')], validators=[DataRequired()])
 
-    username = StringField('Username', validators=[DataRequired()])
-    email = StringField('E-mail', validators=[DataRequired(), Email()])
-    password = PasswordField('Password', validators=[Length(min=6)])
-    image_url = StringField('(Optional) Image URL')
+class CommunitySearchForm(FlaskForm):
+    community = StringField('COMMUNITY:', validators=[DataRequired()])
 
-
-class UserEditForm(FlaskForm):
-    """Form for editing users."""
-
-    username = StringField('Username', validators=[DataRequired()])
-    email = StringField('E-mail', validators=[DataRequired(), Email()])
-    image_url = StringField('(Optional) Image URL')
-    header_image_url = StringField('(Optional) Header Image URL')
-    bio = TextAreaField('(Optional) Tell us about yourself')
-    password = PasswordField('Password', validators=[Length(min=6)])
+class AreaSearchForm(FlaskForm):
+    area = StringField('AREA:', validators=[DataRequired()])
 
 
-class LoginForm(FlaskForm):
-    """Login form."""
 
-    username = StringField('Username', validators=[DataRequired()])
-    password = PasswordField('Password', validators=[Length(min=6)])
 
-#############################
-#Customer forms
+
+
+
+
+
+####################################
 class CustomerSearchForm(FlaskForm):
     customer_name = StringField('Name')
     customer_number = StringField('Phone Number')
@@ -62,12 +57,15 @@ class CustomerNameForm(FlaskForm):
     last_name = StringField('Last Name')
     first_name = StringField('First Name')
 
+
 class NumberEntryForm(FlaskForm):
     number_type = StringField('Number Type')
     number = StringField('Phone Number', validators=[DataRequired(message='Must Have Valid Phone Number'), length(min=7, max=12)])
 
+
 class EmailEntryForm(FlaskForm):
     email = EmailField('Email', validators=[optional(), email(check_deliverability=True, message='Must Be Valid Email')])
+
 
 class AddressEntryForm(FlaskForm):
     address_ln1 = StringField('Address Line 1', validators=[DataRequired(message='Must Have Street Address')])
@@ -92,6 +90,7 @@ class AddressEntryForm(FlaskForm):
 
     directions = StringField('Directions')
 
+
 class EditCustomerInfoForm(FlaskForm):
     last_name = StringField('Last Name', validators=[DataRequired(message='Must Have Primary Last Name')])
     first_name = StringField('First Name')
@@ -100,8 +99,23 @@ class EditCustomerInfoForm(FlaskForm):
 
     referral = StringField('Referral')
     customer_since = DateField('Customer Since', validators=[optional(), DataRequired(message='Date must be in format m/d/yy')], format='%Y-%m-%d')
+ ##########################
+    #CUSTOMER NOTES
     customer_notes = TextAreaField('Customer Notes')
     submit_customer_info = SubmitField('Save Changes', id="info_submit")
+
+
+class EditContactInfoForm(FlaskForm):
+    from markupsafe import Markup
+
+    numbers = FieldList(FormField(NumberEntryForm))
+    add_number = SubmitField(Markup("&plus;"), id='add_number')
+
+    emails = FieldList(FormField(EmailEntryForm))
+    add_email = SubmitField('Add Email')
+
+    submit_contact_info = SubmitField('Save Changes', id="contact_submit")
+
 
 class EditAddressInfoForm(FlaskForm):
     addresses = FieldList(FormField(AddressEntryForm))
@@ -155,25 +169,3 @@ class JobEntryForm(FlaskForm):
 
     search_for_customer = SubmitField('Search for Customer')
     submit_new_job = SubmitField('Add New Job')
-
-
-########################################
-#CALL LOG
-
-class CallForm(FlaskForm):
-    date = StringField("Date", validators=[DataRequired()])
-    time = StringField("Time", validators=[DataRequired()])
-    customer_name = StringField("Customer Name", validators=[DataRequired()])
-    phone_number = StringField("Phone Number", validators=[DataRequired()])
-    community = StringField("Community", validators=[DataRequired()])
-    area = StringField("Area", validators=[DataRequired()])
-    address = StringField("Address", validators=[DataRequired()])
-    customer_type = StringField("Customer Type", validators=[DataRequired()])
-    call_type = StringField("Call Type", validators=[DataRequired()])
-    comments = StringField("Comments")
-    received_type = StringField("Received Type", validators=[DataRequired()])
-    response = BooleanField("Response")
-    card = BooleanField("Card")
-    database = BooleanField("Database")
-    resolved = BooleanField("Resolved")
-    booked = BooleanField("Booked")

@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="search-area">
+    <h1>Area Search</h1>
+    <img src="{{ url_for('static', filename='assets/icons/home.png') }}" alt="home logo" width="180" height="130">
+    <br>
+    <form method="post" action="{{ url_for('area_search') }}">
+        {{ form.csrf_token }}
+        <div class="form-group">
+            {{ form.area.label }}
+            {{ form.area(class="form-control") }}
+            <button type="submit" id="searchbtn" class="btn btn-primary"><i class="fa-solid fa-magnifying-glass"></i> Search</button>
+            {% for error in form.area.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+    </form>
+    <br>
+    <a href="/calls" id="backbtn" class="btn btn-sm btn-primary"><i class="fa-solid fa-arrow-left"></i> Go back</a>
+</div>
+<br>
+    {% if calls %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Customer Name</th>
+                    <th>Phone Number</th>
+                    <th>Community</th>
+                    <th>Area</th>
+                    <th>Address</th>
+                    <th>Customer Type</th>
+                    <th>Call Type</th>
+                    <th>Comments</th>
+                    <th>Received Type</th>
+                    <th>Response</th>
+                    <th>Card</th>
+                    <th>Database</th>
+                    <th>Resolved</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for call in calls %}
+                    <tr>
+                        <td class="search-table">{{ call.date.strftime('%m/%d/%Y') }}</td>
+                        <td class="search-table">{{ call.time.strftime('%H:%M:%S') }}</td>
+                        <td class="search-table">{{ call.customer_name }}</td>
+                        <td class="search-table">{{ call.phone_number }}</td>
+                        <td class="search-table">{{ call.community }}</td>
+                        <td class="search-table">{{ call.area }}</td>
+                        <td class="search-table">{{ call.address }}</td>
+                        <td class="search-table">{{ call.customer_type }}</td>
+                        <td class="search-table">{{ call.call_type }}</td>
+                        <td class="search-table">{{ call.comments }}</td>
+                        <td class="search-table">{{ call.received_type }}</td>
+                        <td class="search-table">{{ call.response }}</td>
+                        <td class="search-table">{{ call.card }}</td>
+                        <td class="search-table">{{ call.database }}</td>
+                        <td class="search-table">{{ call.resolved }}</td>
+                        <td class="actions"><a href="{{ url_for('edit_call', id=call.id) }}" class="btn btn-sm btn-primary">Edit</a>
+                            <a href="{{ url_for('delete_call', id=call.id) }}"  id="back" onclick="return confirmDelete()" class="btn btn-sm btn-primary">Delete</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+{% endblock %}

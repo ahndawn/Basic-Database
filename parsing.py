@@ -29,7 +29,7 @@ def address_parse(address):
         'city': address.city,
         'zip': address.zip,
         'customer_id': address.customer_id,
-        'customer': address.customer.last_name,
+        'customer': address.customers.last_name,
         'community_id': address.community_id,
         'sub_community_id': address.sub_community_id,
         'address_note1': address.address_note1,

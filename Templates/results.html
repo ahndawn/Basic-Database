@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+    {% for result in search_results %}
+    <div>
+        <p>
+            <b>{{ result.community }}</b>
+        </p>
+        <p>
+            {{ result. address }}
+        </p>
+        <p>
+            {{ result.number }}
+        </p>
+    </div>
+    {% endfor %}
+{% endblock %}

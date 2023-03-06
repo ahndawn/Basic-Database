@@ -1,56 +1,58 @@
 
 {% extends "base.html" %}
 
-{% block app_content %}
-<div class="search-area">
+{% block content %}
     <div class="row justify-content-between">
-        <div class="col-auto">
+        <div class="search-area">
             <h1>Customer Search</h1>
         </div>
-        <div class="col-auto">
-            <a href="/customers/add" style="border: none;">
-                <button type="button" class="btn btn-primary" id="new_cust_btn">
-                    New Customer<span class="ps-3"><span class="bi-person-plus-fill p-1" style="color: limegreen;border-color: limegreen;" role="img"></span></span>
+        <div class="search-area">
+            <a href="{{ url_for('new_customer') }}" style="border: none;">
+                <button type="button" id="searchbtn" class="btn btn-primary">
+                    New Customer
                 </button>
             </a>
         </div>
     </div>
-    <br>
     <div class="row justify-content-between">
-        <div class="col-auto">
+        <div class="search-area">
             <form id="customer_search_form" method="post">
                 {{ form.hidden_tag() }}
                 <div class="row py-2 justify-content-start">
                     <div class="col-auto">
-                        <img src="/static/assets/icons/person.png" style="width:35px;height:35px;"> {{ form.customer_name(size=30) }}
+                        <img src="{{ url_for('static', filename='assets/icons/person.png') }}" style="width:50px;height:50px; padding-right: 0%;">
+                    </div>
+                    <div class="col my-auto">
+                        {{ form.customer_name(size=50) }}
                     </div>
                 </div>
-                <br>
                 <div class="row py-2 justify-content-start">
                     <div class="col-auto">
-                        <img src="/static/assets/icons/phone.png" style="width: 40px; height: 40px;"> {{ form.customer_number(size=30) }}
+                        <img src="{{ url_for('static', filename='assets/icons/phone.png') }}" style="width: 50px; height: 50px;">
+                    </div>
+                    <div class="col my-auto">
+                        {{ form.customer_number(size=50) }}
                     </div>
                 </div>
-                <br>
                 <div class="row py-2 justify-content-start">
                     <div class="col-auto">
-                        <img src="/static/assets/icons/home.png" style="width: 40px; height: 40px;">  {{ form.customer_address(size=30) }}
+                        <img src="{{ url_for('static', filename='assets/icons/home.png') }}" style="width: 50px; height: 50px;">
+                    </div>
+                    <div class="col my-auto">
+                        {{ form.customer_address(size=50) }}
                     </div>
                 </div>
-                <br>
-                <div class="row" id="search">
-                    {{ form.submit(class="btn btn-primary form-control") }}
-                </div>
- </div>
+                <button type="submit" id="searchbtn" class="btn btn-primary"><i class="fa-solid fa-magnifying-glass"></i> Search</button>
+
 {#                <table class="table w-50">#}
 {#                    <tr>#}
-{#                        <td style="border: none;"><img src="/static/assets/icons/person.png" style="width:50px;height:50px;"><span class="px-4"></span>{{ form.customer_name(size=50) }}</td>#}
+{#                        <td style="border: none;"><img src="{{ url_for('static', filename='assets/icons/person.png') }}" style="width:50px;height:50px;"><span class="px-4"></span>{{ form.customer_name(size=50) }}</td>#}
 {#                    </tr>#}
 {#                    <tr>#}
-{#                        <td style="border: none;"><img src="/static/assets/icons/phone.png" style="width: 50px; height: 50px;"><span class="px-4"></span>{{ form.customer_number(size=50) }}</td>#}
+{#                        <td style="border: none;"><img src="{{ url_for('static', filename='assets/icons/phone.png') }}" style="width: 50px; height: 50px;"><span class="px-4"></span>{{ form.customer_number(size=50) }}</td>#}
 {#                    </tr>#}
 {#                    <tr>#}
-{#                        <td><img src="/static/assets/icons/home.png" style="width: 50px; height: 50px;"><span class="px-4"></span>{{ form.customer_address(size=50) }}</td>#}
+{#                        <td><img src="{{ url_for('static', filename='assets/icons/home.png') }}" style="width: 50px; height: 50px;"><span class="px-4"></span>{{ form.customer_address(size=50) }}</td>#}
 {#                    </tr>#}
 {#                    <tr>#}
 {#                        <td class="mx-auto" style="display: block;border: none;">{{ form.submit(class="btn btn-primary form-control") }}</td>#}
@@ -65,7 +67,7 @@
 {#        {{ form.hidden_tag()  }}#}
 {#        <div class="row" style="padding-top: 15px; padding-bottom: 15px;">#}
 {#             <div class="column" style="float:left;padding-left:15px;padding-right:15px">#}
-{#                 <img src="/static/assets/icons/person.png" style="width:50px;height:50px">#}
+{#                 <img src="{{ url_for('static', filename='assets/icons/person.png') }}" style="width:50px;height:50px">#}
 {#             </div>#}
 {#            <div class="column" style="float:left">#}
 {#                {{ form.customer_name.label }}<br>#}
@@ -74,7 +76,7 @@
 {#        </div>#}
 {#        <div class="row" style="padding-bottom: 15px; padding-top: 15px;">#}
 {#            <div class="column" style="float:left; padding-left: 15px; padding-right: 15px;">#}
-{#                <img src="/static/assets/icons/phone.png" style="width: 50px; height: 50px">#}
+{#                <img src="{{ url_for('static', filename='assets/icons/phone.png') }}" style="width: 50px; height: 50px">#}
 {#            </div>#}
 {#            <div class="column" style="float: left">#}
 {#                {{ form.customer_number.label }}<br>#}
@@ -83,7 +85,7 @@
 {#        </div>#}
 {#        <div class="row" style="padding-top: 15px; padding-bottom: 15px">#}
 {#            <div class="column" style="float: left; padding-left: 15px; padding-right: 15px">#}
-{#                <img src="/static/assets/icons/home.png" style="width: 50px; height: 50px">#}
+{#                <img src="{{ url_for('static', filename='assets/icons/home.png') }}" style="width: 50px; height: 50px">#}
 {#            </div>#}
 {#            <div class="column" style="float: left">#}
 {#                {{ form.customer_address.label }}<br>#}
