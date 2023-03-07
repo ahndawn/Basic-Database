@@ -1,4 +1,4 @@
-<table class="table bg-info" style="min-width: 390px;">
+<table table class="new_cust_table" style="table-layout: auto;">
     <tr>
         <td style="border: none;padding-top: 10px;"></td>
     </tr>
@@ -6,10 +6,15 @@
         {{ email.form.hidden_tag() }}
         {% if email.errors %}
             <tr>
+                <th>Primary</th>
+                <th>Secondary</th>
+            </tr>
+            <tr>
                 <td style="border: none;color: red" class="text-center"><b>{{ email.errors.email[0] }}</b></td>
             </tr>
         {% endif %}
         <tr>
+            <td class="text-center" style="border: none">{{ email.form.email }}</td>
             <td class="text-center" style="border: none">{{ email.form.email }}</td>
         </tr>
     {% endfor %}

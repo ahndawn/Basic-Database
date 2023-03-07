@@ -1,5 +1,12 @@
 
- 
+h1 {
+  font-family: 'Ubuntu', sans-serif;
+}
+
+ body {
+  font-family: 'Prompt', sans-serif;
+ }
+
 a {
   text-decoration: none;
 }
@@ -183,4 +190,9 @@ img {
   display: block;
   margin: 0 auto;
   box-sizing: content-box;
+}
+
+/* new customer table  */
+.new_cust_table{  
+  table-layout: auto;
 }

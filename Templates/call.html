@@ -12,6 +12,210 @@
     <script src="https://kit.fontawesome.com/2157f639ef.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="static/app.css">
  
+<style>
+
+  
+h1 {
+  font-family: 'Ubuntu', sans-serif;
+}
+
+ body {
+  font-family: 'Prompt', sans-serif;
+ }
+
+a {
+  text-decoration: none;
+}
+
+br {
+  padding: 20%;
+}
+
+.search-area {
+  text-align: center;
+}
+
+
+/* search magnifying glass button on calls table */
+#search{
+  background-color: transparent;
+  border: none;
+  color: black;
+  font-size: 12px;
+  padding: 0%;
+}
+
+/* search magnifying glass button on calls table*/
+#search:hover {
+  background-color: transparent;
+  color: rgb(110, 109, 109);
+}
+
+/* save button */
+#save-btn {
+  border: 1px solid black;
+  color: black;
+  background-color: transparent;
+  font-size: 12px;
+  box-shadow: #444343 2px 2px;
+}
+
+/* save button */
+#save-btn:hover{
+  border: 1px solid black;
+  color: green;
+  background-color: transparent;
+  font-size: 12px;
+  box-shadow: #333 3px 3px;
+}
+
+/* edit pencil button on calls table */
+#edit-btn {
+  border: none;
+  color: black;
+  background-color: transparent;
+  padding-right: 5px;
+  padding-left: 5px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  font-size: 12px;
+}
+#edit-btn:hover {
+  border: none;
+  cursor: pointer;
+  color: darkgrey;
+  background-color: transparent;
+  padding-right: 2.5px;
+  padding-left: 2.5px;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  font-size: 17px;
+}
+
+/* trashcan button on calls table */
+#deletebtn{
+  background-color: transparent;
+  border: none;
+  color: black;
+  padding-right: 5px;
+  padding-left: 5px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  font-size: 12px;
+}
+#deletebtn:hover {
+  color: red;
+  padding-right: 2.5px;
+  padding-left: 2.5px;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  font-size: 17px;
+  }
+
+/* back button for search templates */
+#backbtn {
+  background-color: transparent;
+  color: black;
+  border: none;
+}
+#backbtn:hover {
+  color: rgb(181, 5, 5);
+}
+
+/* search button for search templates */
+#searchbtn {
+  border: none;
+  background: linear-gradient(to bottom, white, lightskyblue);
+  font-size: 14px;
+  color: black;
+  box-shadow: #333 3px 3px;
+}
+#searchbtn:hover {
+  background: linear-gradient(to top, white, lightskyblue);
+  font-size: 14px;
+  color: #444343;
+  box-shadow: #333 5px 5px;
+}
+
+/* search area for search templates */
+.search-table {
+  text-align: center;
+}
+
+
+h1 {
+  text-align: center;
+  font-size: 45px;
+  padding-top: 5%;
+}
+
+/* Navbar container */
+.navbar {
+  margin: 0 auto;
+  overflow: hidden;
+  background-color: #333;
+  font-family: Arial;
+}
+
+/* Links inside the navbar */
+.navbar a {
+  float: left;
+  font-size: 16px;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+.navbar a:hover {
+  background-color: lightskyblue;
+}
+
+
+.table, th, td {
+  border: 1px solid black;
+  text-align: center;
+  padding: 0%;
+  vertical-align: middle;
+  table-layout: auto;
+}
+
+#table-inputs {
+ outline: none;
+ border: none;
+ text-align: center;
+}
+
+thead {
+  background: linear-gradient(to bottom, white, lightskyblue);
+  text-align: center;
+  vertical-align: middle;
+  font-weight: bolder;
+}
+
+img {
+  display: block;
+  margin: 0 auto;
+}
+
+.form-control {
+  font-size: 16px;
+  text-align: center;
+  max-width: fit-content;
+  justify-content: center;
+  display: block;
+  margin: 0 auto;
+  box-sizing: content-box;
+}
+
+/* new customer table  */
+.new_cust_table{  
+  table-layout: auto;
+}
+
+</style>
+
+
   <title>Edit Call</title>
 </head>
 
