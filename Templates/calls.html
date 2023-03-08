@@ -7,7 +7,7 @@
   <form method="post">
     {{ form.csrf_token }}
   <table class="table">
-    <thead>
+    <thead style="font-family: 'Ubuntu', sans-serif;">
       <tr>
         <th>Date</th>
         <th>Time</th>
@@ -17,7 +17,7 @@
         <th>Area <a href="{{ url_for('area_search') }}" class="btn btn-sm btn-primary" id="search"><i class="fa-solid fa-magnifying-glass"></i></a></th>
         <th>Address</th>
         <th>Customer Type</th>
-        <th>Call Type</th>
+        <th>Call Type <a href="{{ url_for('type_search') }}" class="btn btn-sm btn-primary" id="search"><i class="fa-solid fa-magnifying-glass"></i></a></th></th>
         <th>Comments</th>
         <th>Received Type</th>
         <th>Response <a href="{{ url_for('response_search') }}" class="btn btn-sm btn-primary" id="search"><i class="fa-solid fa-magnifying-glass"></i></a></th>

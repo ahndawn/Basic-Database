@@ -3,7 +3,7 @@ from flask_wtf import FlaskForm
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime, date, time
 from models import db, connect_db, Call, Crew, Customer, PhoneNumber, Address, Community, SubCommunity, Job
-from forms import CallForm, PhoneSearchForm, ResponseSearchForm, ResolvedSearchForm, NameSearchForm, CommunitySearchForm, AreaSearchForm, CustomerSearchForm, NewCustomerForm, EditCustomerInfoForm, EditContactInfoForm, EditAddressInfoForm, JobEntryForm
+from forms import CallForm, PhoneSearchForm, TypeSearchForm, ResponseSearchForm, ResolvedSearchForm, NameSearchForm, CommunitySearchForm, AreaSearchForm, CustomerSearchForm, NewCustomerForm, EditCustomerInfoForm, EditContactInfoForm, EditAddressInfoForm, JobEntryForm
 from sqlalchemy import or_, and_
 from sqlalchemy.sql import func
 import submit
@@ -83,6 +83,14 @@ def delete_call(id):
 
 ######################
 # Search routes
+@app.route('/type_search', methods=['GET', 'POST'])
+def type_search():
+    form = TypeSearchForm(request.form)
+    calls = []
+    if request.method == 'POST' and form.validate():
+        call_type = form.call_type.data
+        calls = Call.query.filter(Call.call_type.like(f'%{call_type}%')).all()
+    return render_template('type_search.html', form=form, calls=calls)
 
 @app.route('/response_search', methods=['GET', 'POST'])
 def response_search():

@@ -1,5 +1,8 @@
+.newcustform {
+  text-align: center;
+}
 
-h1 {
+h1, thead {
   font-family: 'Ubuntu', sans-serif;
 }
 
@@ -196,3 +199,4 @@ img {
 .new_cust_table{  
   table-layout: auto;
 }
+

@@ -8,12 +8,12 @@ class CallForm(FlaskForm):
     time = TimeField("Time", validators=[DataRequired()])
     customer_name = StringField("Customer Name", validators=[DataRequired()])
     phone_number = StringField("Phone Number", validators=[DataRequired()])
-    community = SelectField("Community", choices= [(''), ("Hunter's Run"), ("Ibis"), ("PGA Nat")])
-    area = SelectField("Area", choices=[(''), ('north'), ('northwest'), ('northeast'), ('central-west'), ('central'), ('central-east'), ('southeast'), ('south'), ('southwest'), ('ocean')], validators=[DataRequired()])
+    community = StringField("Community")
+    area = SelectField("Area", choices=[(''), ('north'), ('northwest'), ('northeast'), ('central-west'), ('central'), ('central-east'), ('southeast'), ('south'), ('southwest'), ('ocean')])
     address = StringField("Address", validators=[DataRequired()])
     customer_type = SelectField("Customer Type", choices=[('existing'),('new')], validators=[DataRequired()])
     call_type = SelectField("Call Type", choices=[('schedule'),('complaint'), ('payment'), ('estimate')], validators=[DataRequired()])
-    comments = StringField("Comments")
+    comments = StringField("Comments", validators=[DataRequired()])
     received_type = SelectField("Received Type", choices=[('msg'), ('call'), ('rollover')],validators=[DataRequired()])
     response = SelectField("Response", choices=[('yes'), ('no')])
     card = SelectField("Card", choices=[('yes'), ('no')])
@@ -37,6 +37,9 @@ class CommunitySearchForm(FlaskForm):
 
 class AreaSearchForm(FlaskForm):
     area = StringField('AREA:', validators=[DataRequired()])
+
+class TypeSearchForm(FlaskForm):
+    call_type = SelectField('CALL TYPE:', choices=[('schedule'),('complaint'), ('payment'), ('estimate')], validators=[DataRequired()])
 
 
 

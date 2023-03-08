@@ -2,7 +2,11 @@
 
 {% block content %}
 <style>
-    
+.newcustform {
+  text-align: center;
+  margin: 0 auto;
+}
+
 h1 {
   font-family: 'Ubuntu', sans-serif;
 }
@@ -205,7 +209,7 @@ img {
 
     <h1 style="text-align: center;">New Customer</h1>
     <hr>
-    <form action="" method="POST" id="new_customer_form" novalidate>
+    <form action="" method="POST" id="new_customer_form" class="newcustform" novalidate>
         {{ form.hidden_tag() }}
         {{ form.customer_info.form.hidden_tag() }}
         {% set customer = form.customer_info %}
@@ -215,7 +219,7 @@ img {
                     <h2 style="padding-bottom: 5px;">Customer Info</h2>
                     <hr style="margin: 0;">
                 </div>
-                <table style="min-width: 390px; text-align: center;">
+                <table class="newcustform" style="min-width: 390px; text-align: center;">
                     <tr>
                         <th class="text-center" style="border: none;">Last Name</th>
                         <th class="text-center" style="border: none;">First Name</th>
@@ -261,7 +265,7 @@ img {
                             </h2>
                             <hr style="margin: 0;">
                         </div>
-                        <div id="new_phone_fieldset">
+                        <div id="new_phone_fieldset" class="newcustform">
                             {% include '_new_customer_phone_field.html' %}
                         </div>
                     </div>
@@ -274,7 +278,7 @@ img {
                             </h2>
                             <hr style="margin: 0;">
                         </div>
-                        <div id="new_email_fieldset">
+                        <div id="new_email_fieldset" class="newcustform">
                             {% include '_new_customer_email_field.html' %}
                         </div>
                     </div>
@@ -288,7 +292,7 @@ img {
                     </h2>
                     <hr style="margin: 0;">
                 </div>
-                <div id="new_address_fieldset">
+                <div id="new_address_fieldset" class="newcustform">
                     {% include '_new_customer_address_field.html' %}
                 </div>
             </div>
